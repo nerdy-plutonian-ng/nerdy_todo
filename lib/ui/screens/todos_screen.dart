@@ -4,14 +4,30 @@ import 'package:nerdy_todo/ui/theme.dart';
 import 'package:nerdy_todo/ui/widgets/todo_sheet.dart';
 import 'package:provider/provider.dart';
 
+typedef EditFunc = void Function(BuildContext context, int index,
+    [int? childIndex]);
+
 class TodosScreen extends StatelessWidget {
   const TodosScreen({Key? key}) : super(key: key);
 
-  showAddTodoSheet(BuildContext context) {
+  showAddTodoSheet(
+    BuildContext context,
+  ) {
     showModalBottomSheet(
         context: context,
         builder: (context) {
           return const TodoSheet();
+        });
+  }
+
+  showEditTodoSheet(BuildContext context, int index, [int? childIndex]) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return TodoSheet(
+            index: index,
+            childIndex: childIndex,
+          );
         });
   }
 
@@ -31,9 +47,9 @@ class TodosScreen extends StatelessWidget {
                   return Column(
                     children: [
                       AppTodoWidget(
-                        index: index,
-                        key: Key(state.todos[index].id),
-                      ),
+                          index: index,
+                          key: Key(state.todos[index].id),
+                          editFunc: showEditTodoSheet),
                       if (state.todos[index].children.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.only(left: 16.0),
@@ -46,6 +62,7 @@ class TodosScreen extends StatelessWidget {
                                 index: index,
                                 isChild: true,
                                 childIndex: childIndex,
+                                editFunc: showEditTodoSheet,
                                 key: Key('$index-$childIndex'),
                               );
                             },
@@ -116,11 +133,13 @@ class AppTodoWidget extends StatefulWidget {
     required this.index,
     this.isChild = false,
     this.childIndex,
+    required this.editFunc,
   }) : super(key: key);
 
   final int index;
   final bool isChild;
   final int? childIndex;
+  final EditFunc editFunc;
 
   @override
   State<AppTodoWidget> createState() => _AppTodoWidgetState();
@@ -156,6 +175,7 @@ class _AppTodoWidgetState extends State<AppTodoWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () => widget.editFunc(context, widget.index, widget.childIndex),
       onLongPress: confirmDelete,
       onHorizontalDragEnd: (details) {
         if (details.velocity.pixelsPerSecond.dx < 0 &&

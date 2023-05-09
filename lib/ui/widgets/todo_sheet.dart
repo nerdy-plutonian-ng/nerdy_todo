@@ -6,9 +6,10 @@ import '../../data/models/todo.dart';
 import '../screens/todos_view_model.dart';
 
 class TodoSheet extends StatefulWidget {
-  const TodoSheet({Key? key, this.index}) : super(key: key);
+  const TodoSheet({Key? key, this.index, this.childIndex}) : super(key: key);
 
   final int? index;
+  final int? childIndex;
 
   @override
   State<TodoSheet> createState() => _TodoSheetState();
@@ -20,9 +21,23 @@ class _TodoSheetState extends State<TodoSheet> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _titleController = TextEditingController();
+    if (widget.index == null) {
+      _titleController = TextEditingController();
+    } else {
+      if (widget.childIndex == null) {
+        _titleController = TextEditingController(
+            text: Provider.of<TodosState>(context, listen: false)
+                .todos[widget.index!]
+                .title);
+      } else {
+        _titleController = TextEditingController(
+            text: Provider.of<TodosState>(context, listen: false)
+                .todos[widget.index!]
+                .children[widget.childIndex!]
+                .title);
+      }
+    }
   }
 
   @override
@@ -68,15 +83,21 @@ class _TodoSheetState extends State<TodoSheet> {
                   child: const Text('Cancel')),
               FilledButton(
                   onPressed: () {
-                    state.addTodo(Todo(
-                      title: _titleController.text,
-                      isCompleted: false,
-                      children: [],
-                      id: const Uuid().v4(),
-                    ));
+                    if (widget.index == null) {
+                      state.addTodo(Todo(
+                        title: _titleController.text,
+                        isCompleted: false,
+                        children: [],
+                        id: const Uuid().v4(),
+                      ));
+                      Navigator.pop(context);
+                    } else {
+                      state.updateTodoTitle(widget.index!,
+                          _titleController.text, widget.childIndex);
+                    }
                     Navigator.pop(context);
                   },
-                  child: const Text('Save')),
+                  child: Text(widget.index == null ? 'Save' : 'Edit')),
             ],
           )
         ],

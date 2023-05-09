@@ -49,8 +49,13 @@ class TodosState with ChangeNotifier {
     notifyListeners();
   }
 
-  updateTodoTitle(int index, String title) {
-    _todos[index] = _todos[index].copyWith(title: title);
+  updateTodoTitle(int index, String title, int? childIndex) {
+    if (childIndex == null) {
+      _todos[index] = _todos[index].copyWith(title: title);
+    } else {
+      _todos[index].children[childIndex] =
+          _todos[index].children[childIndex].copyWith(title: title);
+    }
     notifyListeners();
   }
 
