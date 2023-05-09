@@ -11,8 +11,12 @@ class TodosState with ChangeNotifier {
     notifyListeners();
   }
 
-  removeTodo(int index) {
-    _todos.removeAt(index);
+  removeTodo(int index, [int? childIndex]) {
+    if (childIndex != null) {
+      _todos[index].children.removeAt(childIndex);
+    } else {
+      _todos.removeAt(index);
+    }
     notifyListeners();
   }
 

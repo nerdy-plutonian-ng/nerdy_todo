@@ -129,9 +129,34 @@ class AppTodoWidget extends StatefulWidget {
 class _AppTodoWidgetState extends State<AppTodoWidget> {
   var padding = 0.0;
 
+  confirmDelete() {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: const Text('Delete?'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('No')),
+              FilledButton(
+                  onPressed: () {
+                    Provider.of<TodosState>(context, listen: false)
+                        .removeTodo(widget.index, widget.childIndex);
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Yes')),
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onLongPress: confirmDelete,
       onHorizontalDragEnd: (details) {
         if (details.velocity.pixelsPerSecond.dx < 0 &&
             widget.childIndex == null) {
