@@ -2,15 +2,15 @@
 
 A todo app
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+1. Add todo
+2. View todos
+3. Edit todo
+4. delete todo
+5. Mark Complete
+6. Swipe right to sublist
+7. Swipe left to remove from sublist
+8. Check list item to mark all sublisted
+9. Theme to match device light or dark theme
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
