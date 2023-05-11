@@ -90,7 +90,6 @@ class _TodoSheetState extends State<TodoSheet> {
                         children: [],
                         id: const Uuid().v4(),
                       ));
-                      Navigator.pop(context);
                     } else {
                       state.updateTodoTitle(widget.index!,
                           _titleController.text, widget.childIndex);

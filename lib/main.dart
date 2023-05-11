@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:nerdy_todo/data/todo_repo/db_saver.dart';
 import 'package:nerdy_todo/ui/screens/todos_screen.dart';
 import 'package:nerdy_todo/ui/screens/todos_view_model.dart';
 import 'package:nerdy_todo/ui/theme.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final todoSaver = DbSaver();
+  await todoSaver.init();
   runApp(ChangeNotifierProvider(
-    create: (_) => TodosState(),
+    create: (_) => TodosState(todoSaver: todoSaver),
     child: const MyApp(),
   ));
 }
